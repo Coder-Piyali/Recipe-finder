@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Register</title>
+    <link rel="stylesheet" href="/login/login.css">
+</head>
+<body>
+    <div class="container">
+        <div id="login-form" class="form-container">
+            <h2>Login</h2>
+            <form>
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" required>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" required>
+                <button type="button" id="login-show-password">Show Password</button>
+                <button type="button" onclick="login()">Login</button>
+                <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Register here</a></p>
+            </form>
+        </div>
+        <div id="register-form" class="form-container">
+            <h2>Register</h2>
+            <form>
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" required>
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" required>
+                <button type="button" id="register-show-password">Show Password</button>
+                <button type="button" onclick="register()">Register</button>
+                <p>Already have an account? <a href="#" onclick="showLoginForm()">Login here</a></p>
+            </form>
+        </div>
+    </div>
+    
+    
+    <script src="scripts.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            showLoginForm();
+            document.getElementById('login-show-password').addEventListener('click', () => togglePassword('login-password'));
+            document.getElementById('register-show-password').addEventListener('click', () => togglePassword('register-password'));
+        });
+        
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+        
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+        
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+        
+            const storedUser = JSON.parse(localStorage.getItem(username));
+            
+            if (storedUser && storedUser.password === password) {
+                alert('Login successful!');
+                // Redirect to the home page
+                window.location.href = '/Home/home.html';
+            } else {
+                alert('Invalid username or password.');
+            }
+        }
+        
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+        
+            if (localStorage.getItem(username)) {
+                alert('Username already exists.');
+            } else {
+                const user = { username, password };
+                localStorage.setItem(username, JSON.stringify(user));
+                alert('Registration successful!');
+                showLoginForm();
+            }
+        }
+        
+    </script>
+
+</body>
+</html>
